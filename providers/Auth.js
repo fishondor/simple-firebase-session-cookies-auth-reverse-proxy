@@ -1,10 +1,12 @@
 const admin = require("firebase-admin");
 
+const Logger = require('./Logger');
 const {
     getEnvVar
 } = require('./Environment');
 
 const serviceAccount = require(getEnvVar('SERVICE_ACCONT_FILE_PATH'));
+const logger = new Logger("Auth service");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -14,17 +16,17 @@ const isAuthorizedUser = async (idToken) => {
     try{
         let decodedToken = await admin.auth().verifyIdToken(idToken);
         if(!decodedToken){
-            console.log('Invalid decoded token', decodedToken);
+            logger.warn('Invalid decoded token', decodedToken);
             return false;
         }
         let userRecord = await admin.auth().getUser(decodedToken.uid);
         if(!userRecord){
-            console.log('Invalid user record', userRecord);
+            logger.warn('Invalid user record', userRecord);
             return false;
         }
         return userRecord.email.startsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
     }catch(error){
-        console.log('Error fetching user data:', error);
+        logger.error('Error fetching user data:', error);
         return false;
     }
 }
@@ -34,7 +36,7 @@ const getSessionCookie = async (idToken) => {
         let sessionCookie = await admin.auth().createSessionCookie(idToken,{expiresIn});
         return sessionCookie
     }catch(error){
-        console.log("Could not create session cookie", error);
+        logger.error("Could not create session cookie", error);
         return false;
     }
 }
@@ -48,7 +50,7 @@ const checkCookie = (req,res,next) => {
 			next();
 		})
 		.catch(error => {
-			// Session cookie is unavailable or invalid. Force user to login.
+            logger.error("Could not validate session cookie", error);
 			res.redirect('/login');
 		});
 
