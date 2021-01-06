@@ -2,6 +2,10 @@
   "name": "firebase-auth-proxy",
   "version": "1.0.0",
   "description": "Simple firebase session cookies auth proxy",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/fishondor/simple-firebase-session-cookies-auth-reverse-proxy.git"
+  },
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
