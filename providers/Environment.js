@@ -1,4 +1,5 @@
-require('dotenv').config({ path: `${pwd}/config/.env` });
+
+require('dotenv').config({ path: `${process.cwd()}/config/.env` });
 
 const getEnvVar = name => process.env[name];
 
