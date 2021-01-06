@@ -86,16 +86,6 @@ isAuthorizedUser = async (idToken) => {
         console.log('Error fetching user data:', error);
         return false;
     }
-    /* admin.auth().verifyIdToken(idToken).then(function(decodedToken){
-        admin.auth().getUser(decodedToken.uid)
-            .then((userRecord) => {
-                // See the UserRecord reference doc for the contents of userRecord.
-                console.log(`Successfully fetched user data:`, userRecord.email.startsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN')));
-            })
-            .catch((error) => {
-                console.log('Error fetching user data:', error);
-            });
-    }); */
 }
 
 //saving cookies and verify cookies
@@ -110,22 +100,6 @@ getSessionCookie = async (idToken) => {
         return false;
     }
 }
-
-/* function savecookie(idToken,res){
-    admin.auth().createSessionCookie(idToken,{expiresIn})
-    .then((sessionCookie)=>{
-	
-        admin.auth().verifyIdToken(idToken).then(function(decodedClaims){
-            res.cookie('__session', sessionCookie, cookieOptions).redirect('/');
-        });
-
-    },error=>{
-        console.log(error);
-        res.status(401).send("UnAuthorised Request");
-
-    });
-} */
-
 
 function checkCookie(req,res,next){
 
