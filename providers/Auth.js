@@ -6,6 +6,7 @@ const {
 } = require('./Environment');
 
 const serviceAccount = require(getEnvVar('SERVICE_ACCONT_FILE_PATH'));
+const firebaseConfig = require(getEnvVar('FIREBASE_CONFIG_FILE_PATH'));
 const logger = new Logger("Auth service");
 
 const expiresIn = parseInt(getEnvVar('COOKIE_EXPIRATION'));
@@ -63,5 +64,6 @@ module.exports = {
     isAuthorizedUser,
     getSessionCookie,
     checkCookie,
-    cookieOptions
+    cookieOptions,
+    firebaseConfig
 }
