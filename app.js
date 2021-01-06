@@ -12,16 +12,14 @@ const {
 const {
     isAuthorizedUser,
     getSessionCookie,
-    checkCookie
+    checkCookie,
+    cookieOptions
 } = require("./providers/Auth");
 
 const apiProxy = httpProxy.createProxyServer();
 
-require('dotenv').config({ path: `${__dirname}/.env` });
 const endpoint = getEnvVar('ENDPOINT');
 const port = getEnvVar('PORT');
-const expiresIn = 60 * 60 * 24 *1000;
-const cookieOptions = {maxAge: expiresIn, httpOnly: true, secure: false, domain: getEnvVar('COOKIE_DOMAIN')};
 
 const app = express();
 app.use(cookieParser());
@@ -68,10 +66,7 @@ app.delete('/*', checkCookie, function(req, res) {
     apiProxy.web(req, res, {target: endpoint});
 });
 
-http.createServer({
-    key: fs.readFileSync(`${process.cwd()}/certs/server.key`),
-    cert: fs.readFileSync(`${process.cwd()}/certs/server.cert`)
-}, app)
+http.createServer(app)
 .listen(port, function () {
     console.log(`Firebase auth proxy is listening on port ${port} with target: ${endpoint}`);
 });
