@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <!-- Firebase Package-->
+     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-auth.js"></script>
+
+     <!-- Loads the login UI elements-->
+     <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+ 
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin</title>
+</head>
+<body>
+    
+    <h1 style="text-align: center;" >Sign in with Google Example</h1>
+    <div id="firebaseui-auth-container">
+
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    axios.defaults.withCredentials = true;
+    var config = {
+        apiKey: "AIzaSyCkvOsfbwPP1Hu6XvDPCe5tyrrAZltL50g",
+        authDomain: "my-band-website.firebaseapp.com",
+        databaseURL: "https://my-band-website.firebaseio.com",
+        projectId: "my-band-website",
+        storageBucket: "my-band-website.appspot.com",
+        messagingSenderId: "1061282874017",
+        appId: "1:1061282874017:web:c21a7e60920efb5f"
+    };
+    firebase.initializeApp(config);
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    //var currentUser = firebase.auth().currentUser;
+
+    /* if (currentUser) {
+        console.log("currentUser", currentUser);
+    } else {
+        console.log("currentUser not signed in");
+    }
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            console.log("Current user", user);
+        } else {
+            console.log("No Current user");
+        }
+    }); */
+
+// FirebaseUI config.
+var uiConfig = {
+    signInOptions: [
+        // google sign in option
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+
+    // Terms of service url/callback.
+    tosUrl: 'TOS URL',
+    // Privacy policy url/callback.
+    privacyPolicyUrl: function() {
+        window.location.assign('Privacy Policy URL');
+    },
+
+    callbacks: {
+        signInSuccess: function(user, credential, redirectUrl) {
+            // User successfully signed in.
+
+            user.getIdToken().then(function(idToken) {
+                axios.post('/savecookie', {idToken: idToken})
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                        window.location = "/";
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+            }).catch(error => {
+                console.log(error);
+            }) ;
+
+        }
+    }
+};
+// Initialize the FirebaseUI Widget using Firebase.
+var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+// The start method will wait until the DOM is loaded.
+ui.start('#firebaseui-auth-container', uiConfig);
+</script>
+
+
+
+
+</body>
+</html>
