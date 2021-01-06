@@ -2,9 +2,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
 const http = require('http');
-const fs = require('fs');
 const httpProxy = require('http-proxy');
-//const cors = require('cors');
+const exphbs  = require('express-handlebars');
 
 const {
     getEnvVar
@@ -13,7 +12,8 @@ const {
     isAuthorizedUser,
     getSessionCookie,
     checkCookie,
-    cookieOptions
+    cookieOptions,
+    firebaseConfig
 } = require("./providers/Auth");
 
 const apiProxy = httpProxy.createProxyServer();
@@ -24,15 +24,23 @@ const port = getEnvVar('PORT');
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
-//app.use(cors());
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
-app.get('/login', (req,res)=>{
-    res.sendFile(__dirname +'/login.html');
+const handleBarsOptions = {
+    firebaseConfig,
+    helpers: {
+        json: context => JSON.stringify(context)
+    }
+}
+
+app.get('/login', (req,res) => {
+    res.render('login', handleBarsOptions);
 });
 
-app.get('/logout',(req,res)=>{
+app.get('/logout', (req,res) => {
     res.clearCookie('__session', cookieOptions);
-    res.sendFile(__dirname +'/login.html');
+    res.render('login', handleBarsOptions);
 });
 
 app.post('/savecookie', async (req, res) => {
