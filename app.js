@@ -1,5 +1,4 @@
 const express = require("express");
-const admin = require("firebase-admin");
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -10,13 +9,17 @@ const httpProxy = require('http-proxy');
 const {
     getEnvVar
 } = require("./providers/Environment");
+const {
+    isAuthorizedUser,
+    getSessionCookie,
+    checkCookie
+} = require("./providers/Auth");
 
 const apiProxy = httpProxy.createProxyServer();
 
 require('dotenv').config({ path: `${__dirname}/.env` });
 const endpoint = getEnvVar('ENDPOINT');
 const port = getEnvVar('PORT');
-const serviceAccount = require(`${process.cwd()}/${getEnvVar('SERVICE_ACCONT_FILE_NAME')}`);
 const expiresIn = 60 * 60 * 24 *1000;
 const cookieOptions = {maxAge: expiresIn, httpOnly: true, secure: false, domain: getEnvVar('COOKIE_DOMAIN')};
 
@@ -24,10 +27,6 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 //app.use(cors());
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
 
 app.get('/login', (req,res)=>{
     res.sendFile(__dirname +'/login.html');
@@ -68,53 +67,6 @@ app.post('/*', checkCookie, function(req, res) {
 app.delete('/*', checkCookie, function(req, res) {
     apiProxy.web(req, res, {target: endpoint});
 });
-
-isAuthorizedUser = async (idToken) => {
-    try{
-        let decodedToken = await admin.auth().verifyIdToken(idToken);
-        if(!decodedToken){
-            console.log('Invalid decoded token', decodedToken);
-            return false;
-        }
-        let userRecord = await admin.auth().getUser(decodedToken.uid);
-        if(!userRecord){
-            console.log('Invalid user record', userRecord);
-            return false;
-        }
-        return userRecord.email.startsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
-    }catch(error){
-        console.log('Error fetching user data:', error);
-        return false;
-    }
-}
-
-//saving cookies and verify cookies
-// Reference : https://firebase.google.com/docs/auth/admin/manage-cookies
-
-getSessionCookie = async (idToken) => {
-    try{
-        let sessionCookie = await admin.auth().createSessionCookie(idToken,{expiresIn});
-        return sessionCookie
-    }catch(error){
-        console.log("Could not create session cookie", error);
-        return false;
-    }
-}
-
-function checkCookie(req,res,next){
-
-	const sessionCookie = req.cookies.__session || '';
-	admin.auth().verifySessionCookie(
-		sessionCookie, true).then((decodedClaims) => {
-			req.decodedClaims = decodedClaims;
-			next();
-		})
-		.catch(error => {
-			// Session cookie is unavailable or invalid. Force user to login.
-			res.redirect('/login');
-		});
-
-}
 
 http.createServer({
     key: fs.readFileSync(`${process.cwd()}/certs/server.key`),
