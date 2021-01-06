@@ -28,7 +28,7 @@ const isAuthorizedUser = async (idToken) => {
             logger.warn('Invalid user record', userRecord);
             return false;
         }
-        return userRecord.email.startsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
+        return userRecord.email.endsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
     }catch(error){
         logger.error('Error fetching user data:', error);
         return false;
