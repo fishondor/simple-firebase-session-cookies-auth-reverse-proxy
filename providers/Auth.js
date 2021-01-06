@@ -8,6 +8,9 @@ const {
 const serviceAccount = require(getEnvVar('SERVICE_ACCONT_FILE_PATH'));
 const logger = new Logger("Auth service");
 
+const expiresIn = parseInt(getEnvVar('COOKIE_EXPIRATION'));
+const cookieOptions = {maxAge: expiresIn, httpOnly: true, secure: false, domain: getEnvVar('COOKIE_DOMAIN')};
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
@@ -59,5 +62,6 @@ const checkCookie = (req,res,next) => {
 module.exports = {
     isAuthorizedUser,
     getSessionCookie,
-    checkCookie
+    checkCookie,
+    cookieOptions
 }
