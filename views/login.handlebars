@@ -1,0 +1,46 @@
+<h1 style="text-align: center;" >Sign in with Google</h1>
+<div id="firebaseui-auth-container">
+
+</div>
+ 
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+<script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-auth.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    axios.defaults.withCredentials = true;
+    var config = {{{json firebaseConfig}}};
+    firebase.initializeApp(config);
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    var uiConfig = {
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        ],
+        tosUrl: 'TOS URL',
+        privacyPolicyUrl: 'Privacy Policy URL',
+        callbacks: {
+            signInSuccess: function(user, credential, redirectUrl) {
+
+                user.getIdToken().then(function(idToken) {
+                    axios.post('/savecookie', {idToken: idToken})
+                        .then(function (response) {
+                            window.location = "/";
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                        });
+                }).catch(error => {
+                    console.error(error);
+                }) ;
+
+            }
+        }
+    };
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
+</script>
