@@ -18,7 +18,7 @@ const {
 
 const apiProxy = httpProxy.createProxyServer();
 
-const endpoint = getEnvVar('ENDPOINT');
+const proxyTarget = getEnvVar('PROXY_TARGET');
 const port = getEnvVar('PORT');
 
 const app = express();
@@ -59,22 +59,22 @@ app.post('/savecookie', async (req, res) => {
 });
 
 app.get('/*', checkCookie, function(req, res) {
-    apiProxy.web(req, res, {target: endpoint});
+    apiProxy.web(req, res, {target: proxyTarget});
 });
 
 app.put('/*', checkCookie, function(req, res) {
-    apiProxy.web(req, res, {target: endpoint});
+    apiProxy.web(req, res, {target: proxyTarget});
 });
 
 app.post('/*', checkCookie, function(req, res) {
-    apiProxy.web(req, res, {target: endpoint});
+    apiProxy.web(req, res, {target: proxyTarget});
 });
 
 app.delete('/*', checkCookie, function(req, res) {
-    apiProxy.web(req, res, {target: endpoint});
+    apiProxy.web(req, res, {target: proxyTarget});
 });
 
 http.createServer(app)
 .listen(port, function () {
-    console.log(`Firebase auth proxy is listening on port ${port} with target: ${endpoint}`);
+    console.log(`Firebase auth proxy is listening on port ${port}. Target: ${proxyTarget}`);
 });
