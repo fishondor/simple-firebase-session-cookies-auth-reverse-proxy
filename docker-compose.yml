@@ -1,0 +1,7 @@
+version: '2'
+services:
+  express:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    entrypoint: ["node", "app.js"]
