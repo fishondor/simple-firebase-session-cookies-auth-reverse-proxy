@@ -5,8 +5,8 @@ const {
     getEnvVar
 } = require('./Environment');
 
-const serviceAccount = require(getEnvVar('SERVICE_ACCONT_FILE_PATH'));
-const firebaseConfig = require(getEnvVar('FIREBASE_CONFIG_FILE_PATH'));
+const serviceAccount = require(`${process.cwd()}/config/${getEnvVar('SERVICE_ACCONT_FILE_NAME')}`);
+const firebaseConfig = require(`${process.cwd()}/config/${getEnvVar('FIREBASE_CONFIG_FILE_NAME')}`);
 const logger = new Logger("Auth service");
 
 const expiresIn = parseInt(getEnvVar('COOKIE_EXPIRATION'));
