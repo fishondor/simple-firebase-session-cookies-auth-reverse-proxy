@@ -12,7 +12,8 @@ const Auth = require("./providers/Auth");
 
 const apiProxy = httpProxy.createProxyServer();
 
-const proxyTarget = getEnvVar('PROXY_TARGET');
+const host = getEnvVar('HOST') || 'localhost';
+const proxyTarget = `http://${host}:${getEnvVar('REVERSE_PROXY_TARGET_PORT')}`;
 const port = getEnvVar('PORT');
 
 const app = express();
