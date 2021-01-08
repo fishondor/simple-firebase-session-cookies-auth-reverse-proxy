@@ -45,26 +45,7 @@ const getUserById = async (id) => {
 }
 
 const isAuthorized = (user) => {
-    return user.email.startsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
-}
-
-const isAuthorizedUser = async (idToken) => {
-    try{
-        let decodedToken = await admin.auth().verifyIdToken(idToken);
-        if(!decodedToken){
-            logger.warn('Invalid decoded token', decodedToken);
-            return false;
-        }
-        let userRecord = await admin.auth().getUser(decodedToken.uid);
-        if(!userRecord){
-            logger.warn('Invalid user record', userRecord);
-            return false;
-        }
-        return 
-    }catch(error){
-        logger.error('Error fetching user data:', error);
-        return false;
-    }
+    return user.email.endsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
 }
 
 const getSessionCookie = async (idToken) => {
