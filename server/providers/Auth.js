@@ -60,7 +60,7 @@ const getSessionCookie = async (idToken) => {
 
 const checkCookie = (req,res,next) => {
 
-	const sessionCookie = req.cookies.__session || '';
+	const sessionCookie = req.cookies[getEnvVar('COOKIE_NAME')] || '';
 	admin.auth().verifySessionCookie(
 		sessionCookie, true).then((decodedClaims) => {
 			req.decodedClaims = decodedClaims;
@@ -73,12 +73,37 @@ const checkCookie = (req,res,next) => {
 
 }
 
+const api = {
+    saveCookie: async (req, res) => {
+        console.log("SAAVE COOKIE");
+        const idToken = req.body.idToken;
+        let authenticatedUser = await validateToken(idToken);
+        if(!authenticatedUser){
+            res.status(401).send();
+            return;
+        }
+        let user = await getUserById(authenticatedUser.uid);
+        if(!authenticatedUser){
+            res.status(500).send();
+            return;
+        }
+        let authorized = await isAuthorized(user);
+        if(!authorized){
+            res.status(401).send();
+            return;
+        }
+        let sessionCookie = await getSessionCookie(idToken);
+        if(!sessionCookie){
+            res.status(401).send();
+            return;
+        }
+        res.cookie(getEnvVar('COOKIE_NAME'), sessionCookie, cookieOptions).redirect('/');
+    }
+}
+
 module.exports = {
-    getSessionCookie,
     checkCookie,
     cookieOptions,
     firebaseConfig,
-    validateToken,
-    getUserById,
-    isAuthorized
+    api
 }
