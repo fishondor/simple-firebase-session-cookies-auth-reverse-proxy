@@ -9,7 +9,7 @@
   "main": "server/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/app.js",
+    "start": "node server/server.js",
     "start:docker": "docker-compose up --build -d",
     "stop:docker": "docker-compose down"
   },
