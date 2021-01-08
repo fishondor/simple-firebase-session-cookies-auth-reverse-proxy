@@ -16,6 +16,38 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
 
+const validateToken = async (idToken) => {
+    try{
+        let decodedToken = await admin.auth().verifyIdToken(idToken);
+        if(!decodedToken){
+            logger.warn('Invalid token', decodedToken);
+            return false;
+        }
+        return decodedToken;
+    }catch(error){
+        logger.error('Error fetching user data:', error);
+        return false;
+    }
+}
+
+const getUserById = async (id) => {
+    try{
+        let userRecord = await admin.auth().getUser(id);
+        if(!userRecord){
+            logger.warn('Cannot get user', userRecord);
+            return false;
+        }
+        return userRecord;
+    }catch(error){
+        logger.error('Error getting user', error);
+        return false;
+    }
+}
+
+const isAuthorized = (user) => {
+    return user.email.startsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
+}
+
 const isAuthorizedUser = async (idToken) => {
     try{
         let decodedToken = await admin.auth().verifyIdToken(idToken);
@@ -28,7 +60,7 @@ const isAuthorizedUser = async (idToken) => {
             logger.warn('Invalid user record', userRecord);
             return false;
         }
-        return userRecord.email.endsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
+        return 
     }catch(error){
         logger.error('Error fetching user data:', error);
         return false;
@@ -61,9 +93,11 @@ const checkCookie = (req,res,next) => {
 }
 
 module.exports = {
-    isAuthorizedUser,
     getSessionCookie,
     checkCookie,
     cookieOptions,
-    firebaseConfig
+    firebaseConfig,
+    validateToken,
+    getUserById,
+    isAuthorized
 }

@@ -8,13 +8,7 @@ const exphbs  = require('express-handlebars');
 const {
     getEnvVar
 } = require("./providers/Environment");
-const {
-    isAuthorizedUser,
-    getSessionCookie,
-    checkCookie,
-    cookieOptions,
-    firebaseConfig
-} = require("./providers/Auth");
+const Auth = require("./providers/Auth");
 
 const apiProxy = httpProxy.createProxyServer();
 
@@ -28,7 +22,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 const handleBarsOptions = {
-    firebaseConfig,
+    firebaseConfig: Auth.firebaseConfig,
     helpers: {
         json: context => JSON.stringify(context)
     }
@@ -39,38 +33,48 @@ app.get('/login', (req,res) => {
 });
 
 app.get('/logout', (req,res) => {
-    res.clearCookie('__session', cookieOptions);
+    res.clearCookie('__session', Auth.cookieOptions);
     res.render('login', handleBarsOptions);
 });
 
 app.post('/savecookie', async (req, res) => {
     const idToken = req.body.idToken;
-    let authorized = await isAuthorizedUser(idToken);
-    if(!authorized){
-        res.status(403).send();
+    let authenticatedUser = await Auth.validateToken(idToken);
+    if(!authenticatedUser){
+        res.status(401).send();
         return;
     }
-    let sessionCookie = await getSessionCookie(idToken);
+    let user = await Auth.getUserById(authenticatedUser.uid);
+    if(!authenticatedUser){
+        res.status(500).send();
+        return;
+    }
+    let authorized = await Auth.isAuthorized(user);
+    if(!authorized){
+        res.status(401).send();
+        return;
+    }
+    let sessionCookie = await Auth.getSessionCookie(idToken);
     if(!sessionCookie){
         res.status(401).send();
         return;
     }
-    res.cookie('__session', sessionCookie, cookieOptions).redirect('/');
+    res.cookie('__session', sessionCookie, Auth.cookieOptions).redirect('/');
 });
 
-app.get('/*', checkCookie, function(req, res) {
+app.get('/*', Auth.checkCookie, function(req, res) {
     apiProxy.web(req, res, {target: proxyTarget});
 });
 
-app.put('/*', checkCookie, function(req, res) {
+app.put('/*', Auth.checkCookie, function(req, res) {
     apiProxy.web(req, res, {target: proxyTarget});
 });
 
-app.post('/*', checkCookie, function(req, res) {
+app.post('/*', Auth.checkCookie, function(req, res) {
     apiProxy.web(req, res, {target: proxyTarget});
 });
 
-app.delete('/*', checkCookie, function(req, res) {
+app.delete('/*', Auth.checkCookie, function(req, res) {
     apiProxy.web(req, res, {target: proxyTarget});
 });
 
