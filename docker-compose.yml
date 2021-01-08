@@ -6,4 +6,4 @@ services:
       - ${PORT}:${PORT}
     environment:
       - HOST=host.docker.internal
-    entrypoint: ["node", "app.js"]
+    entrypoint: ["npm", "run", "start"]
