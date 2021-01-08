@@ -75,8 +75,7 @@ const checkCookie = (req,res,next) => {
 
 const api = {
     saveCookie: async (req, res) => {
-        console.log("SAAVE COOKIE");
-        const idToken = req.body.idToken;
+        let idToken = req.body.idToken;
         let authenticatedUser = await validateToken(idToken);
         if(!authenticatedUser){
             res.status(401).send();
