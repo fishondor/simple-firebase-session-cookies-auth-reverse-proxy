@@ -11,7 +11,7 @@ const serviceAccount = require(`${process.cwd()}/config/${serviceAccountFileName
 const firebaseConfig = require(`${process.cwd()}/config/${firebseConfigFileName}`);
 const logger = new Logger("Auth service");
 
-const expiresIn = parseInt(getEnvVar('COOKIE_EXPIRATION'));
+const expiresIn = parseInt(getEnvVar('COOKIE_MAX_AGE'));
 const cookieDomain = getEnvVar('COOKIE_DOMAIN');
 const cookieName = getEnvVar('COOKIE_NAME');
 const cookieOptions = {maxAge: expiresIn, httpOnly: true, secure: false, domain: cookieDomain};
