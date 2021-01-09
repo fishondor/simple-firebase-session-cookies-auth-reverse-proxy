@@ -1,9 +1,13 @@
-version: '2'
+version: '3'
 services:
   express:
     build: .
+    env_file:
+      - .env
     ports:
       - ${PORT}:${PORT}
     environment:
       - HOST=host.docker.internal
+    volumes:
+      - ./config:/var/www/firebase-auth-proxy/config
     entrypoint: ["npm", "run", "start"]
