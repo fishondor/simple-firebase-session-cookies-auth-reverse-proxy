@@ -5,6 +5,7 @@ const {
 
 const handleBarsOptions = {
     firebaseConfig: Auth.firebaseConfig,
+    saveCookieEndpoint: getEnvVar('SAVE_COOKIE_ENDPOINT'),
     helpers: {
         json: context => JSON.stringify(context)
     }

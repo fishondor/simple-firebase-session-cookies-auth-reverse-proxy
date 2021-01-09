@@ -24,7 +24,7 @@
             signInSuccess: function(user, credential, redirectUrl) {
 
                 user.getIdToken().then(function(idToken) {
-                    axios.post('/savecookie', {idToken: idToken})
+                    axios.post('/{{saveCookieEndpoint}}', {idToken: idToken})
                         .then(function (response) {
                             window.location = "/";
                         })
