@@ -1,0 +1,12 @@
+{
+    "HOST": "localhost",
+    "REVERSE_PROXY_TARGET_PORT": 8080,
+    "PORT": 80,
+    "SERVICE_ACCONT_FILE_NAME": "service-account.json",
+    "FIREBASE_CONFIG_FILE_NAME": "firebase-config.json",
+    "COOKIE_DOMAIN": null,
+    "COOKIE_EXPIRATION": 86400000,
+    "COOKIE_NAME": "__revers_proxy_session",
+    "AUTHORIZED_EMAIL_DOMAIN": false,
+    "SAVE_COOKIE_ENDPOINT": "savecookie"
+}
