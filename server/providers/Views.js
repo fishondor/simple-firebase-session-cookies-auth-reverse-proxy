@@ -3,9 +3,11 @@ const {
     getEnvVar
 } = require("./Environment");
 
+const saveCookieEndpoint = getEnvVar('SAVE_COOKIE_ENDPOINT');
+const cookieName = getEnvVar('COOKIE_NAME');
 const handleBarsOptions = {
     firebaseConfig: Auth.firebaseConfig,
-    saveCookieEndpoint: getEnvVar('SAVE_COOKIE_ENDPOINT'),
+    saveCookieEndpoint: saveCookieEndpoint,
     helpers: {
         json: context => JSON.stringify(context)
     }
@@ -16,7 +18,7 @@ const login = (req,res) => {
 }
 
 const logout = (req,res) => {
-    res.clearCookie(getEnvVar('COOKIE_NAME'), Auth.cookieOptions);
+    res.clearCookie(cookieName, Auth.cookieOptions);
     res.render('login', handleBarsOptions);
 }
 

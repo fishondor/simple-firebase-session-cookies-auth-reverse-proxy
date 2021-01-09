@@ -10,10 +10,12 @@ const Views = require('./Views');
 const apiProxy = httpProxy.createProxyServer();
 const router = express.Router();
 
-const host = getEnvVar('HOST') || 'localhost';
-const proxyTarget = `http://${host}:${getEnvVar('REVERSE_PROXY_TARGET_PORT')}`;
+const host = getEnvVar('HOST');
+const proxyTargetPort = getEnvVar('REVERSE_PROXY_TARGET_PORT');
+const proxyTarget = `http://${host}:${proxyTargetPort}`;
+const saveCookieEndpoint = getEnvVar('SAVE_COOKIE_ENDPOINT');
 
-router.post(`/${getEnvVar('SAVE_COOKIE_ENDPOINT')}`, Auth.api.saveCookie);
+router.post(`/${saveCookieEndpoint}`, Auth.api.saveCookie);
 
 router.get('/login', Views.login);
 

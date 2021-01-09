@@ -12,7 +12,7 @@ const {
     proxyTarget
 } = require("./providers/router");
 
-const port = getEnvVar('PORT') || 80;
+const port = getEnvVar('PORT');
 
 const app = express();
 app.use(cookieParser());

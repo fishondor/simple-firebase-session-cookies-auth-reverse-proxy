@@ -5,12 +5,16 @@ const {
     getEnvVar
 } = require('./Environment');
 
-const serviceAccount = require(`${process.cwd()}/config/${getEnvVar('SERVICE_ACCONT_FILE_NAME')}`);
-const firebaseConfig = require(`${process.cwd()}/config/${getEnvVar('FIREBASE_CONFIG_FILE_NAME')}`);
+const serviceAccountFileName = getEnvVar('SERVICE_ACCONT_FILE_NAME');
+const firebseConfigFileName = getEnvVar('FIREBASE_CONFIG_FILE_NAME');
+const serviceAccount = require(`${process.cwd()}/config/${serviceAccountFileName}`);
+const firebaseConfig = require(`${process.cwd()}/config/${firebseConfigFileName}`);
 const logger = new Logger("Auth service");
 
 const expiresIn = parseInt(getEnvVar('COOKIE_EXPIRATION'));
-const cookieOptions = {maxAge: expiresIn, httpOnly: true, secure: false, domain: getEnvVar('COOKIE_DOMAIN')};
+const cookieDomain = getEnvVar('COOKIE_DOMAIN');
+const cookieName = getEnvVar('COOKIE_NAME');
+const cookieOptions = {maxAge: expiresIn, httpOnly: true, secure: false, domain: cookieDomain};
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -45,7 +49,10 @@ const getUserById = async (id) => {
 }
 
 const isAuthorized = (user) => {
-    return user.email.endsWith(getEnvVar('AUTHORIZED_EMAIL_DOMAIN'));
+    let authorizedEmailDomain = getEnvVar('AUTHORIZED_EMAIL_DOMAIN');
+    if(!authorizedEmailDomain)
+        return true;
+    return user.email.endsWith(authorizedEmailDomain);
 }
 
 const getSessionCookie = async (idToken) => {
@@ -60,7 +67,7 @@ const getSessionCookie = async (idToken) => {
 
 const checkCookie = (req,res,next) => {
 
-	const sessionCookie = req.cookies[getEnvVar('COOKIE_NAME')] || '';
+	const sessionCookie = req.cookies[cookieName] || '';
 	admin.auth().verifySessionCookie(
 		sessionCookie, true).then((decodedClaims) => {
 			req.decodedClaims = decodedClaims;
@@ -96,7 +103,7 @@ const api = {
             res.status(401).send();
             return;
         }
-        res.cookie(getEnvVar('COOKIE_NAME'), sessionCookie, cookieOptions).redirect('/');
+        res.cookie(cookieName, sessionCookie, cookieOptions).redirect('/');
     }
 }
 
