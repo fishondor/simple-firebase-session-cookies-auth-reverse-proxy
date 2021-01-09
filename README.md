@@ -17,7 +17,7 @@ It creates en express server that serves as authentication middleware and revers
 
 ### Configuration
 1. Configuration options can be defined by creating .env file in the root folder. Use *.env.template* file for reference.
-Available options are specified [here](#)
+Available options are specified [here](#options-table)
     * Using the .env file is optional for running directly with node. When running with docker-compose the file must exists and the value **PORT** must be defined there, the rest are optional
 3. Copy service account private key json file into config directory
 2. Create firebase web client config object in a json file and copy into config directory
@@ -30,7 +30,7 @@ Available options are specified [here](#)
 * ```docker-compose up --build -d``` (also supported with ```npm run start:docker```)
 * Stop with ```docker-compose down``` (also supported with ```npm run stop:docker```)
 
-### Configuration options
+### <a name="options-table"></a>Configuration options
 | Name                      | Description                                                                                                                                                          | Default value          |
 |---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
 | PORT                      | Port the server will listen on                                                                                                                                       | 80                     |
