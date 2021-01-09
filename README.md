@@ -15,12 +15,30 @@ It creates en express server that serves as authentication middleware and revers
 
 ## How to use
 
-1. Create .env file from .env.template file and provide the required fields in it
-2. Copy service account private key json file into config directory
-3. Create firebase web client config object to json file and copy into config directory
-4. Run
-    * Node ```npm run start``` OR
-    * Docker ```docker-compose up --build -d``` (also supported with ```npm run start:docker```)
-5. Stop
-    * Node: ctrl + c
-    * Docker: ```docker-compose down``` (also supported with ```npm run stop:docker```) 
+### Configuration
+1. Configuration options can be defined by creating .env file in the root folder. Use *.env.template* file for reference.
+Available options are specified [here](#)
+    * Using the .env file is optional for running directly with node. When running with docker-compose the file must exists and the value **PORT** must be defined there, the rest are optional
+3. Copy service account private key json file into config directory
+2. Create firebase web client config object in a json file and copy into config directory
+
+### Run with node
+* ```npm run start```
+* Stop with ctrl+c
+
+### Run with docker-compose
+* ```docker-compose up --build -d``` (also supported with ```npm run start:docker```)
+* Stop with ```docker-compose down``` (also supported with ```npm run stop:docker```)
+
+### Configuration options
+| Name                      | Description                                                                                                                                                          | Default value          |
+|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| PORT                      | Port the server will listen on                                                                                                                                       | 80                     |
+| REVERSE_PROXY_TARGET_PORT | Port of the service that requests will be forwarded to (in localhost)                                                                                                | 8080                   |
+| SERVICE_ACCONT_FILE_NAME  | Name of the service account private key file                                                                                                                         | service-account.json   |
+| FIREBASE_CONFIG_FILE_NAME | Name of the json file created with web client firebase configuration                                                                                                 | firebase-config.json   |
+| COOKIE_DOMAIN             | Domain for registering session cookie (default null will set it to current domain) [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes) | null                   |
+| COOKIE_MAX_AGE            | Expiration time for session cookie in miliseconds [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)  | 86400000               |
+| COOKIE_NAME               | Name of session cookie [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)                                            | __revers_proxy_session |
+| AUTHORIZED_EMAIL_DOMAIN   | Domain to use for authorizing user by email (some_user@domin.com). Default value of false means authorizing everybody                                               | false                  |
+| SAVE_COOKIE_ENDPOINT      | The name of the route for creating and saving session cookie                                                                                                         | savecookie             |
