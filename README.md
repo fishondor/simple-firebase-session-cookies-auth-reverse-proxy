@@ -4,8 +4,6 @@ This project is for easily implementing authentication and authorization using f
 
 It creates express server that serves as authentication middleware and reverse proxy authenticated and authorized requests to the intended application.
 
-Inspired by [saadzafar's](https://github.com/saadzafar) [fire-guard-proxy project](https://github.com/saadzafar/fire-guard-proxy)
-
 ## Requirements
 
 * Firebase account
@@ -44,3 +42,7 @@ Available options are specified [here](#options-table)
 | COOKIE_NAME               | Name of session cookie [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)                                            | __revers_proxy_session |
 | AUTHORIZED_EMAIL_DOMAIN   | Domain to use for authorizing user by email (some_user@domin.com). Default value of false means authorizing everybody                                               | false                  |
 | SAVE_COOKIE_ENDPOINT      | The name of the route for creating and saving session cookie                                                                                                         | savecookie             |
+
+Inspired by these resources: 
+* [Firebase login using cookie sessions](https://www.geeksforgeeks.org/firebase-sign-in-with-google-authentication-in-node-js-using-firebase-ui-and-cookie-sessions/)
+* [fire-guard-proxy](https://github.com/saadzafar/fire-guard-proxy/blob/master/proxy.js)
