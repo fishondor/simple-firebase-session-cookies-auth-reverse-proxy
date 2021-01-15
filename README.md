@@ -2,7 +2,9 @@
 
 This project is for easily implementing authentication and authorization using firebase session cookies.
 
-It creates en express server that serves as authentication middleware and reverse proxy authenticated and authorized requests to the intended application.
+It creates express server that serves as authentication middleware and reverse proxy authenticated and authorized requests to the intended application.
+
+Inspired by [saadzafar's](https://github.com/saadzafar) [fire-guard-proxy project](https://github.com/saadzafar/fire-guard-proxy)
 
 ## Requirements
 
