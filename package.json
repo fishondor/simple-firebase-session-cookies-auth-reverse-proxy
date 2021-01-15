@@ -13,7 +13,7 @@
     "start:docker": "docker-compose up --build -d",
     "stop:docker": "docker-compose down"
   },
-  "author": "Ariel Fisher",
+  "author": "Ariel Fisher <fishondor@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
