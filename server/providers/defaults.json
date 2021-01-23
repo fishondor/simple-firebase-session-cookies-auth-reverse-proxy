@@ -6,7 +6,7 @@
     "FIREBASE_CONFIG_FILE_NAME": "firebase-config.json",
     "COOKIE_DOMAIN": null,
     "COOKIE_MAX_AGE": 86400000,
-    "COOKIE_NAME": "__revers_proxy_session",
+    "COOKIE_NAME": "__reverse_proxy_session",
     "AUTHORIZED_EMAIL_DOMAIN": false,
     "SAVE_COOKIE_ENDPOINT": "savecookie"
 }
