@@ -30,6 +30,10 @@ Available options are specified [here](#options-table)
 * ```docker-compose up --build -d``` (also supported with ```npm run start:docker```)
 * Stop with ```docker-compose down``` (also supported with ```npm run stop:docker```)
 
+### Run directly from docker image
+* ```docker run -p [HOST PORT:CONTAINER PORT] -v ${PWD}/config:/var/www/firebase-auth-proxy/config fishondor/firebase-auth-reverse-proxy```
+* Set environment variables with -e flag. Ex: ```docker run -p 80:80 -v ${PWD}/config:/var/www/firebase-auth-proxy/config -e "AUTHORIZED_EMAIL_DOMAIN=[VAR VALUE]" -e "COOKIE_NAME=[VAR VALUE]" fishondor/firebase-auth-reverse-proxy```
+
 ### <a name="options-table"></a>Configuration options
 | Name                      | Description                                                                                                                                                          | Default value          |
 |---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
