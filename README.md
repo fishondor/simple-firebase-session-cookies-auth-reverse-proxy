@@ -43,7 +43,7 @@ Available options are specified [here](#options-table)
 | FIREBASE_CONFIG_FILE_NAME | Name of the json file created with web client firebase configuration                                                                                                 | firebase-config.json   |
 | COOKIE_DOMAIN             | Domain for registering session cookie (default null will set it to current domain) [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes) | null                   |
 | COOKIE_MAX_AGE            | Expiration time for session cookie in miliseconds [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)  | 86400000               |
-| COOKIE_NAME               | Name of session cookie [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)                                            | __revers_proxy_session |
+| COOKIE_NAME               | Name of session cookie [Read more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)                                            | __reverse_proxy_session |
 | AUTHORIZED_EMAIL_DOMAIN   | Domain to use for authorizing user by email (some_user@domin.com). Default value of false means authorizing everybody                                               | false                  |
 | SAVE_COOKIE_ENDPOINT      | The name of the route for creating and saving session cookie                                                                                                         | savecookie             |
 
